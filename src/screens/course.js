@@ -22,18 +22,18 @@ import Loader from "../components/loader";
 import res from "../components/responsive";
 import { Table, Row, Rows } from 'react-native-table-component';
 
-const Staff = ({ navigation }) => {
-    const tableHead =['ID', 'Staff Name', 'Qualification Name'];
-    const [staffData,setStaffData] = useState([]);
+const Course = ({ navigation }) => {
+    const tableHead =['ID', 'Course Name', 'No of Section'];
+    const [courseData,setcourseData] = useState([]);
     const [modal, setModal] = useState(false);
-
-    const tableData= staffData.map((item, index) => [index+1,item.staff_name,item.qualification] )
+    
+    const tableData= courseData.map((item, index) => [index+1,item.course_name,item.no_section] )
    const data =async()=>{ 
     setModal(true)
-    await axios.get('https://620502d5161670001741b2f7.mockapi.io/staff/staff ')
+    await axios.get('https://620502d5161670001741b2f7.mockapi.io/staff/department')
     .then(function (response) {
       console.log(response);
-      setStaffData(response.data);
+      setcourseData(response.data);
       setModal(false)
     })
     .catch(function (error) {
@@ -73,12 +73,12 @@ useFocusEffect(
                                 fontSize: res(14),
                                 fontWeight: '700'
                             }}>
-                                Staff Details
+                                Department Details
                             </Text>
                         </View>
                         <View>
                             <TouchableOpacity
-                            onPress={()=> navigation.navigate('StaffDetails')}
+                            onPress={()=> navigation.navigate('CourseDetails')}
                             style={{
                                 backgroundColor: '#53798a',
                                 paddingHorizontal: res(15),
@@ -117,16 +117,16 @@ useFocusEffect(
                     {/* <View style={styles.mainbox}>
                         <DataTable>
                             <DataTable.Header style={styles.databeHeader}>
-                                <DataTable.Title  textStyle={styles.header}>ID</DataTable.Title>
-                                <DataTable.Title  textStyle={styles.header}>Staff Name</DataTable.Title>
-                                <DataTable.Title  textStyle={styles.header}>Qualification</DataTable.Title>
+                                <DataTable.Title textStyle={styles.header}>ID</DataTable.Title>
+                                <DataTable.Title textStyle={styles.header}>course Name</DataTable.Title>
+                                <DataTable.Title  textStyle={styles.header}>No of Section</DataTable.Title>
                             </DataTable.Header>
-                            {staffData.map((item,index)=>
+                            {courseData.map((item,index)=>
                             
                             <DataTable.Row style={styles.databeBox} key={index}>
                                 <DataTable.Cell textStyle={styles.child}>{item.id}</DataTable.Cell>
-                                <DataTable.Cell textStyle={styles.child}>{item.staff_name}</DataTable.Cell>
-                                <DataTable.Cell textStyle={styles.child}>{item.qualification}</DataTable.Cell>
+                                <DataTable.Cell textStyle={styles.child}>{item.course_name}</DataTable.Cell>
+                                <DataTable.Cell textStyle={styles.child}>{item.no_section}</DataTable.Cell>
                             </DataTable.Row>
                             )}
                         </DataTable>
@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Staff;
+export default Course;

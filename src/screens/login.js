@@ -1,4 +1,4 @@
-import React,{useState}from "react";
+import React, { useState } from "react";
 import {
     SafeAreaView,
     ScrollView,
@@ -11,14 +11,32 @@ import {
 } from 'react-native';
 
 import { fb, google, logo, tw } from '../assets/index';
+import res from "../components/responsive";
+import { EMAIL } from "../service/constants";
+const Login = ({ navigation }) => {
 
-const Login = ({navigation}) => {
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
 
-    const [email,setEmail] = useState(null);
-    const [password,setPassword] = useState(null);
+    const [passwordErr, setPasswordErr] = useState(null);
+    const [emailIdErr, setEmailErr] = useState(null);
+    const changeEmail = (e) => {
+        if (e != '') {
+            setEmail(e);
+            if (EMAIL.test(e)) {
+                setEmailErr(false);
+            } else {
+                setEmailErr(true);
+            }
+        } else {
+            setEmail(e);
+            setEmailErr(true);
+        }
 
-    const sign =()=>{
-    navigation.navigate('Home');
+    }
+
+    const sign = () => {
+        navigation.navigate('Home');
     }
 
     return (
@@ -26,7 +44,7 @@ const Login = ({navigation}) => {
             <ScrollView>
                 <View style={{
                     alignItems: 'center',
-                    marginTop: 30
+                    marginTop: res(30)
                 }}>
                     <Image source={logo} style={{
                         resizeMode: 'contain',
@@ -35,14 +53,14 @@ const Login = ({navigation}) => {
                     }} />
                 </View>
                 <View style={{
-                    marginHorizontal: 20,
-                    marginTop: 50
+                    marginHorizontal: res(20),
+                    marginTop: res(30)
                 }}>
                     <View style={{
-                        paddingVertical: 20
+                        paddingVertical: res(10)
                     }}>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: res(16),
                             fontWeight: '800',
                             color: '#000'
                         }}>
@@ -50,63 +68,72 @@ const Login = ({navigation}) => {
                         </Text>
                     </View>
                     <View style={{
-                        marginTop: 25
+                        marginTop: res(25)
                     }}>
                         <TextInput
                             placeholder="Email"
                             placeholderTextColor={'#000'}
-                            onChangeText={(e)=>setEmail(e)}
+                            onChangeText={(e) => changeEmail(e)}
                             style={{
                                 backgroundColor: '#fff',
                                 borderRadius: 10,
-                                paddingHorizontal: 10,
-                                fontSize: 16
+                                paddingHorizontal: res(10),
+                                fontSize: res(13),
+                                color:'#000',
+                                height:res(50)
                             }} />
                     </View>
+                     {emailIdErr == true &&
+              <Text style={{ color: 'tomato', }}>
+                Please enter valid Email
+              </Text>
+            }
                     <View style={{
-                        marginTop: 25
+                        marginTop: res(25)
                     }}>
                         <TextInput
-                        onChangeText={(e)=>setPassword(e)}
+                            onChangeText={(e) => setPassword(e)}
                             placeholder="Password"
                             placeholderTextColor={'#000'}
                             style={{
                                 backgroundColor: '#fff',
                                 borderRadius: 10,
-                                paddingHorizontal: 10,
-                                fontSize: 16
+                                paddingHorizontal: res(10),
+                                fontSize: res(13),
+                                color:'#000',
+                                height:res(50)
                             }} />
                     </View>
                     <View style={{
-                        marginTop: 40
+                        marginTop: res(40)
                     }}>
                         <TouchableOpacity
-                        disabled={email == '' || email == null && password == null ||password == null? true : false}
-                        onPress={sign}
-                        style={{
-                            backgroundColor: '#000075',
-                            alignItems: 'center',
-                            paddingVertical: 15,
-                            borderRadius: 10
-                        }}>
+                            disabled={emailIdErr == true || password == null ? true : false}
+                            onPress={sign}
+                            style={{
+                                backgroundColor:emailIdErr == true || password == null || password == '' ? '#ADD8E6' :'#000075',
+                                alignItems: 'center',
+                                paddingVertical: res(15),
+                                borderRadius: 10
+                            }}>
                             <Text style={{
-                                fontSize: 16,
+                                fontSize: res(15),
                                 fontWeight: '600',
-                                color: '#fff'
+                                color: '#fff',
                             }}>
                                 Sign in
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{
-                        marginTop: 70,
-                        marginBottom: 40
+                        marginTop: res(50),
+                        marginBottom: res(25)
                     }}>
                         <Text style={{
-                            fontSize: 16,
+                            fontSize: res(13),
                             fontWeight: '600',
                             color: '#000',
-                            textAlign: 'center'
+                            textAlign: 'center',
                         }}>
                             - Or Sign in with -
                         </Text>
@@ -136,14 +163,15 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
     social: {
-        width: 50,
-        height: 50,
+        width: res(30),
+        height: res(30),
         resizeMode: 'contain',
         borderRadius: 50
     },
     backIcon: {
         backgroundColor: '#fff',
-        paddingHorizontal: 20,
+        padding: res(5),
+        paddingHorizontal:res(20),
         borderRadius: 5
     }
 })

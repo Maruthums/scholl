@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
                 <View style={[
                     styles.btn
                 ]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.navigate('Course')}>
                         <Text style={[
                             styles.text
                         ]}>
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
                 <View style={[
                     styles.btn
                 ]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Student')}>
                         <Text style={[
                             styles.text
                         ]}>

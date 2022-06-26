@@ -20,6 +20,10 @@
    NavigationContainer,
  } from '@react-navigation/native';
  import 'react-native-gesture-handler';
+ import { LogBox } from "react-native"
+
+ LogBox.ignoreAllLogs(true)
+
  
  const App =() => {
  

@@ -21,9 +21,19 @@ import axios from 'axios';
 import { EMAIL } from "../service/constants";
 import Loader from "../components/loader";
 import res from "../components/responsive";
+import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from 'react-native-element-dropdown';
 
-const StaffDetails = ({ navigation }) => {
+const CourseDetails = ({ navigation }) => {
 
+    const [datas1, setData] = useState([]);
+    const [value, setValue] = useState(null);
+    const [isFocus, setIsFocus] = useState(false);
+
+    const [valueStaff, setValueStaff] = useState(null);
+    const [isFocusStaff, setIsFocusStaff] = useState(false);
+
+console.log(value,valueStaff);
     const StaffName = useRef(null);
     const Phone = useRef(null);
     const Qualification = useRef(null);
@@ -32,7 +42,10 @@ const StaffDetails = ({ navigation }) => {
     const [qualification, setQualification] = useState(null);
     const [email, setEmail] = useState(null);
     const [phone, setPhone] = useState(null);
-
+    const datas = datas1.map((items) =>
+    ({ label: items?.course_name, value: items?.course_name }));
+    const dataStaff = datas1.map((items) =>
+    ({ label: items?.staff_name, value: items?.staff_name }));
     const [emailIdErr, setEmailErr] = useState(null);
     const [modal, setModal] = useState(false);
     const changeEmail = (e) => {
@@ -49,11 +62,20 @@ const StaffDetails = ({ navigation }) => {
         }
 
     }
+    const onChanges = async (item) => {
+        setValue(item.value);
+        setIsFocus(false);
+    }
 
+    const onChangesStaff = async (item) => {
+        setValueStaff(item.value);
+        setIsFocusStaff(false);
+    }
     const data = () => {
         setModal(true);
-        axios.post('https://620502d5161670001741b2f7.mockapi.io/staff/staff', {
-            staff_name: staffName,
+        axios.post('https://620502d5161670001741b2f7.mockapi.io/staff/department', {
+            course_name:value,
+            staff_name: valueStaff,
             qualification: qualification,
             phone: phone,
             email: email
@@ -68,13 +90,31 @@ const StaffDetails = ({ navigation }) => {
             });
     }
 
+    const Getdata = () => {
+        setModal(true);
+        axios.get('https://620502d5161670001741b2f7.mockapi.io/staff/department')
+            .then(function (response) {
+                console.log(response);
+                setModal(false);
+                setData(response.data)
+            })
+            .catch(function (error) {
+                setModal(false);
+                alert(`You have ${error.message} So Please check`);
+            });
+    }
+
+    useEffect(()=>{
+        Getdata()
+    },[])
     const onhandleReset = () => {
         setEmail(null);
         setPhone(null);
         setQualification(null);
         setStaffName(null);
         setEmailErr(false);
-        StaffName.current.clear();
+        setValueStaff('');
+        setValue('');
         Phone.current.clear();
         Qualification.current.clear();
         Email.current.clear();
@@ -102,25 +142,94 @@ const StaffDetails = ({ navigation }) => {
                                 fontSize: res(16),
                                 fontWeight: '700',
                             }}>
-                                Add Staff Details
+                                Add Department Details
                             </Text>
                         </View>
                     </View>
                     <View>
                         <View>
                             <Text style={[styles.label]}>
+                                Course Name
+                            </Text>
+                        </View>
+                        <View style={{
+                        paddingLeft: res(15),
+                        borderRadius: 5,
+                        width: '100%',
+                        borderWidth: 1,
+                        // marginLeft: 25,
+                        height: res(45),
+                        borderColor: '#43404042',
+                        padding: 5, 
+                        //  marginTop: 40
+                    }}>
+                        <Dropdown
+                        containerStyle={{
+                            color:'#000',
+                            backgroundColor:'#c5c5c5'
+                        }}
+                        activeColor='#53798a'
+                            placeholderStyle={{ fontSize: res(13), color: '#53798a', }}
+                            selectedTextStyle={{ fontSize: res(13), color: '#000' }}
+                            data={datas}
+                            maxHeight={100}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={!isFocus ? 'Choose' : '...'}
+                            value={value}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                                onChanges(item)
+                            }}
+                            
+                            dropdownPosition='bottom'
+                        />
+                    </View>
+                    </View>
+
+                    <View>
+                        <View>
+                            <Text style={[styles.label]}>
                                 Staff Name
                             </Text>
                         </View>
-                        {/* <DropShadow style={styles.shadowProp}> */}
-                            <TextInput
-                                ref={StaffName}
-                                onChangeText={(e) => setStaffName(e)}
-                                style={[
-                                    styles.TextInput
-                                ]}
-                            />
-                        {/* </DropShadow> */}
+                        <View style={{
+                        paddingLeft: res(15),
+                        borderRadius: 5,
+                        width: '100%',
+                        borderWidth: 1,
+                        // marginLeft: 25,
+                        height: res(45),
+                        borderColor: '#43404042',
+                        padding: 5, 
+                        //  marginTop: 40
+                    }}>
+                        <Dropdown
+                        containerStyle={{
+                            color:'#000',
+                            backgroundColor:'#c5c5c5'
+                        }}
+                        activeColor='#53798a'
+                            placeholderStyle={{ fontSize: res(13), color: '#53798a' }}
+                            selectedTextStyle={{ fontSize: res(13), color: 'black' }}
+                            data={dataStaff}
+                            maxHeight={100}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={!isFocusStaff ? 'Choose' : '...'}
+                            value={valueStaff}
+                            onFocus={() => setIsFocusStaff(true)}
+                            onBlur={() => setIsFocusStaff(false)}
+                            onChange={item => {
+                                onChangesStaff(item)
+                            }}
+                            dropdownPosition='bottom'
+                            style={{
+                                color:'#000'
+                            }}
+                        />
+                    </View>
                     </View>
 
                     <View>
@@ -155,10 +264,10 @@ const StaffDetails = ({ navigation }) => {
                             />
                         {/* </DropShadow> */}
                         {emailIdErr == true &&
-              <Text style={{ color: 'tomato', }}>
-                Please enter valid Email
-              </Text>
-            }
+                            <Text style={{ color: 'tomato', }}>
+                                Please enter valid Email
+                            </Text>
+                        }
                     </View>
                     <View>
                         <View>
@@ -182,16 +291,17 @@ const StaffDetails = ({ navigation }) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     borderRadius: 8,
+                    marginBottom:res(20)
                 }}>
                     <View style={{
-                        backgroundColor:staffName == '' || staffName == null || qualification == '' || qualification == null ||
-                        emailIdErr == true || phone == null || phone == '' ? '#08727669': '#53798a',
+                        backgroundColor: value == '' || value == null || valueStaff ==''|| valueStaff == null|| qualification == '' || qualification == null ||
+                            emailIdErr == true || phone == null || phone == '' ? '#08727669' : '#53798a',
                         borderRadius: 5,
                     }}>
                         <TouchableOpacity
-                        disabled={staffName == '' || staffName == null || qualification == '' || qualification == null ||
-                    emailIdErr == true || phone == null || phone == '' ? true:false}
-                        onPress={()=> data()}>
+                            disabled={value == '' || value == null || valueStaff ==''|| valueStaff == null|| qualification == '' || qualification == null ||
+                                emailIdErr == true || phone == null || phone == '' ? true : false}
+                            onPress={() => data()}>
                             <Text style={[
                                 {
                                     color: '#fff',
@@ -227,10 +337,10 @@ const StaffDetails = ({ navigation }) => {
                     </View>
                 </View>
                 {modal && (
-        <Modal transparent={true} visible={modal}>
-          <Loader />
-        </Modal>
-      )}
+                    <Modal transparent={true} visible={modal}>
+                        <Loader />
+                    </Modal>
+                )}
             </ScrollView>
         </SafeAreaView>
     )
@@ -248,17 +358,17 @@ const styles = StyleSheet.create({
         borderColor: '#43404042',
         borderWidth: 1,
         borderRadius: 5,
-        fontSize:res(13),
-        paddingHorizontal:res(15),
-        color:'#000',
-        height:res(45)
+        fontSize: res(13),
+        paddingHorizontal: res(15),
+        color: '#000',
+        height: res(45)
     },
     shadowProp: {
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0,
         shadowRadius: 1.2,
     },
 })
 
-export default StaffDetails;
+export default CourseDetails;

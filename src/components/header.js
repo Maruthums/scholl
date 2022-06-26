@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { avatar, fb, google, logo, menu, search, tw } from '../assets/index';
+import res from "./responsive";
 
 const Header = ({ navigation }) => {
 
@@ -20,8 +21,8 @@ const Header = ({ navigation }) => {
     return (
             <View style={{
                 flexDirection: 'row',
-                paddingHorizontal: 20,
-                paddingVertical: 20,
+                paddingHorizontal: res(20),
+                paddingVertical: res(20),
                 alignItems: 'center',
                 backgroundColor: '#53798a',
                 justifyContent: 'space-between'
@@ -36,7 +37,8 @@ const Header = ({ navigation }) => {
                     alignItems: 'center',
                     backgroundColor: '#fff',
                     width: '70%',
-                    borderRadius: 5
+                    borderRadius: 5,
+                    height:res(30)
                 }}>
                     <View>
                         <Image source={search} style={[styles.search]} />
@@ -45,7 +47,9 @@ const Header = ({ navigation }) => {
                         <TextInput
                             placeholder="Search"
                             style={{
-                                width: 200
+                                width: 180,
+                                height:res(100),
+                                color:'#000',
                             }} />
                     </View>
                 </View>
@@ -58,25 +62,25 @@ const Header = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     icon: {
-        width: 30,
-        height: 30,
+        width: res(20),
+        height: res(20),
         resizeMode: 'contain',
     },
     search: {
-        width: 20,
-        height: 20,
+        width: res(15),
+        height: res(15),
         resizeMode: 'contain',
-        paddingHorizontal: 20
+        paddingHorizontal: res(15)
     },
     user: {
-        width: 60,
-        height: 60,
+        width: res(45),
+        height: res(45),
         resizeMode: 'contain',
     },
     btn:{
         backgroundColor:'#53798a',
-        height:40,
-        width:120,
+        height:res(40),
+        width:res(120),
         borderRadius:5,
         marginVertical:8,
         alignItems:'center',
@@ -84,7 +88,7 @@ const styles = StyleSheet.create({
     },
     text:{
         color:'#fff',
-        fontSize:16,
+        fontSize:res(16),
         fontWeight:'700'
     }
 })
